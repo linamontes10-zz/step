@@ -13,16 +13,16 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fun fact to the page.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addRandomFunFact() {
+  const funFacts =
+      ['I am a Capricorn sun, Aquarius Moon, and Cancer rising', 'I am fluent in Spanish and English', 'I adopted a dog when I was 15, and his name is Austin!', 'I am a first-generation college student.'];
 
   // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const funFactContainer = document.getElementById('fun-fact-container');
+  funFactContainer.innerText = funFact;
 }

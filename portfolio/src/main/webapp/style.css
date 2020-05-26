@@ -2,8 +2,29 @@
   margin-left: auto;
   margin-right: auto;
   width: 650px;
+  color:lightslategray;
+}
+
+body {
+  background-color:seashell;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+button {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: lightblue;
+  color:lightslategray;
 }
 
 #greeting-container {
   margin-top: 20px;
+}
+
+img {
+  width: 25%;
+  height: 25%;
+}
+
+#title {
+  color: lightblue;
 }
