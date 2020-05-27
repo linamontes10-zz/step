@@ -1,10 +1,3 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-  color:lightslategray;
-}
-
 body {
   background-color:seashell;
   font-family: 'Courier New', Courier, monospace;
@@ -16,14 +9,11 @@ button {
   color:lightslategray;
 }
 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  display: inline;
+#content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+  color:lightslategray;
 }
 
 #greeting-container {
@@ -35,6 +25,17 @@ img {
   height: 25%;
 }
 
+li {
+  display: inline;
+}
+
+
 #title {
   color: lightblue;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
