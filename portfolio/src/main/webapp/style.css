@@ -1,4 +1,16 @@
+body {
+  background-color:seashell;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+button {
+  background-color: lightblue;
+  color: lightslategray;
+  font-family: 'Courier New', Courier, monospace;
+}
+
 #content {
+  color: lightslategray;
   margin-left: auto;
   margin-right: auto;
   width: 650px;
@@ -6,4 +18,23 @@
 
 #greeting-container {
   margin-top: 20px;
+}
+
+img {
+  width: 25%;
+}
+
+li {
+  display: inline;
+}
+
+
+#title {
+  color: lightblue;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
