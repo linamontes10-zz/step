@@ -16,13 +16,17 @@
  * Adds a random fun fact to the page.
  */
 
+// Spotify API keys to be used for later
 // var client_id = '444dda318d8949cb9282d95a9885a7c6';
 // var client_secret = '9f81ba6cf5748ef9d24a7ddb1e8bc4c';
 // var redirect_uri = 'https://8080-dot-12317386-dot-devshell.appspot.com/misc.html';
 
 function addRandomFunFact() {
   const funFacts =
-      ['I am a Capricorn sun, Aquarius Moon, and Cancer rising', 'I am fluent in Spanish and English', 'I adopted a dog when I was 15, and his name is Austin!', 'I am a first-generation college student.'];
+      ['I am a Capricorn sun, Aquarius Moon, and Cancer rising',
+       'I am fluent in Spanish and English',
+       'I adopted a dog when I was 15, and his name is Austin!',
+       'I am a first-generation college student.'];
 
   // Pick a random greeting.
   const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
