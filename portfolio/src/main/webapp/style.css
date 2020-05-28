@@ -16,12 +16,22 @@ button {
   width: 650px;
 }
 
+#currently-playing {
+  color: cornflowerblue;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+}
+
 #greeting-container {
   margin-top: 20px;
 }
 
 img {
   width: 25%;
+}
+
+.inline {
+  display: inline;
 }
 
 li {
@@ -37,4 +47,15 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.iframe-flex {
+  display: inline-block;
+}
+
+.iframe-items{
+  align-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
