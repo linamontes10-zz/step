@@ -1,19 +1,19 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-  color:lightslategray;
-}
-
 body {
   background-color:seashell;
   font-family: 'Courier New', Courier, monospace;
 }
 
 button {
-  font-family: 'Courier New', Courier, monospace;
   background-color: lightblue;
+  color: lightslategray;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#content {
   color:lightslategray;
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
 }
 
 #greeting-container {
@@ -22,7 +22,6 @@ button {
 
 img {
   width: 25%;
-  height: 25%;
 }
 
 #title {
