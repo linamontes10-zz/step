@@ -24,6 +24,17 @@ img {
   width: 25%;
 }
 
+li {
+  display: inline;
+}
+
+
 #title {
   color: lightblue;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
