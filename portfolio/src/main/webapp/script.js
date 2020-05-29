@@ -17,11 +17,13 @@
  */
 
 // Spotify API keys to be used for later
-var oauth_token = 'BQCebg7W1ZsfuUCdCjdcHz-GDJFMj5GjOhTxvrpNFhu3gvEzYftF3UrSIZ9KHYXVjVdF346qrcaQtd4df7FN0p5sQj2x2p3HpEsCtIDPg4owl4aZx5HfQ4wqWKY3y8l2KakUPS2ZwGKW_PbiPefFMJ3y2FVGfzmz2Kb--w9DxyLBOA';
+const clientId = "444dda318d8949cb9282d95a9885a7c6";
+let oauthToken = 'BQCebg7W1ZsfuUCdCjdcHz-GDJFMj5GjOhTxvrpNFhu3gvEzYftF3UrSIZ9KHYXVjVdF346qrcaQtd4df7FN0p5sQj2x2p3HpEsCtIDPg4owl4aZx5HfQ4wqWKY3y8l2KakUPS2ZwGKW_PbiPefFMJ3y2FVGfzmz2Kb--w9DxyLBOA';
+
 
 function minutesAndSeconds(milliseconds) {
-  var minutes = Math.floor(milliseconds /60000);
-  var seconds = ((milliseconds % 60000) / 1000).toFixed(0)
+  const minutes = Math.floor(milliseconds / 60000);
+  const seconds = ((milliseconds % 60000) / 1000).toFixed(0)
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }
 
