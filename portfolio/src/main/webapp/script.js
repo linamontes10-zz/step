@@ -17,11 +17,10 @@
  */
 
 // Spotify API keys to be used for later
-const clientId = "444dda318d8949cb9282d95a9885a7c6";
-let oauthToken = 'BQCebg7W1ZsfuUCdCjdcHz-GDJFMj5GjOhTxvrpNFhu3gvEzYftF3UrSIZ9KHYXVjVdF346qrcaQtd4df7FN0p5sQj2x2p3HpEsCtIDPg4owl4aZx5HfQ4wqWKY3y8l2KakUPS2ZwGKW_PbiPefFMJ3y2FVGfzmz2Kb--w9DxyLBOA';
+let oauthToken = "BQBfb7mRzso8njtQ7rYNgM_qRWFNcns48SAzy2sk-2WMEJEvPsLm2Ef_8rRNtbHYIFlhfunCNDewaYfmbe4sWILp6Y9D5cCfbJBJEelVfKf25j_7z0mv7ATwrzhFA3JZZMAUFKt-n066SbdiXjaX7iA9X4zGyAXc-Kp0Ki63wvWDGQ";
 
 
-function minutesAndSeconds(milliseconds) {
+function formatAsMinutesAndSeconds(milliseconds) {
   const minutes = Math.floor(milliseconds / 60000);
   const seconds = ((milliseconds % 60000) / 1000).toFixed(0)
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
@@ -29,9 +28,9 @@ function minutesAndSeconds(milliseconds) {
 
 function getCurrentlyPlayingSong() {
   const response = fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-    method: 'GET',
+    method: "GET",
     headers: {
-      Authorization: 'Bearer ' + oauth_token
+      Authorization: "Bearer " + oauthToken
     }
   })
 
@@ -40,48 +39,42 @@ function getCurrentlyPlayingSong() {
 
 setInterval(function() {
   getCurrentlyPlayingSong();
-}, 500);
+}, 10000);
 
 function handleReponse(response) {
 
-  // Set variable equal to response json
   const text = response.json();
 
-  // Pass text to AddSongToPage
   text.then(addSongToPage)
 }
 
 function addSongToPage(song) {
-  let artists = '';
-  let percentage = (song.progress_ms / song.item.duration_ms) * 100;
+  let artists = "";
 
   for (let iterator = 0; iterator < song.item.album.artists.length; iterator++) {
     if (iterator == song.item.album.artists.length - 1) {
       artists += song.item.album.artists[iterator].name;
       break;
     }
-    artists + song.item.album.artists[iterator].name + ',';
+    artists += song.item.album.artists[iterator].name + ", ";
   }
   
-  document.getElementById('song-title').innerText = song.item.name;
-  document.getElementById('song-artists').innerText = artists;
-  document.getElementById('song-progress').innerText = minutesAndSeconds(
-    song.progress_ms);
-  document.getElementById('song-duration').innerText = minutesAndSeconds(
+  document.getElementById("currently-playing").innerText =
+    song.item.name + " by " + artists + " at " + formatAsMinutesAndSeconds(song.progress_ms) + " of " + formatAsMinutesAndSeconds(
     song.item.duration_ms);
 }
 
 function addRandomFunFact() {
   const funFacts =
-      ['I am a Capricorn sun, Aquarius Moon, and Cancer rising',
-       'I am fluent in Spanish and English',
-       'I adopted a dog when I was 15, and his name is Austin!',
-       'I am a first-generation college student.'];
+      ["I am a Capricorn sun, Aquarius Moon, and Cancer rising",
+       "I am fluent in Spanish and English",
+       "I adopted a dog when I was 15, and his name is Austin!",
+       "I am a first-generation college student."];
 
   // Pick a random greeting.
   const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
 
   // Add it to the page.
-  const funFactContainer = document.getElementById('fun-fact-container');
+  const funFactContainer = document.getElementById("fun-fact-container");
   funFactContainer.innerText = funFact;
 }
