@@ -16,10 +16,6 @@
  * Adds a random fun fact to the page.
  */
 
-// Spotify API keys to be used for later
-let oauthToken = "BQBfb7mRzso8njtQ7rYNgM_qRWFNcns48SAzy2sk-2WMEJEvPsLm2Ef_8rRNtbHYIFlhfunCNDewaYfmbe4sWILp6Y9D5cCfbJBJEelVfKf25j_7z0mv7ATwrzhFA3JZZMAUFKt-n066SbdiXjaX7iA9X4zGyAXc-Kp0Ki63wvWDGQ";
-
-
 function formatAsMinutesAndSeconds(milliseconds) {
   const minutes = Math.floor(milliseconds / 60000);
   const seconds = ((milliseconds % 60000) / 1000).toFixed(0)
@@ -27,14 +23,16 @@ function formatAsMinutesAndSeconds(milliseconds) {
 }
 
 function getCurrentlyPlayingSong() {
-  const response = fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + oauthToken
-    }
-  })
-
-  response.then(handleReponse);
+  $.get("./auth.txt", function(data) {
+    let oauthToken = data;
+    const response = fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + oauthToken
+      }
+    })
+    response.then(handleReponse);
+  });
 }
 
 setInterval(function() {
