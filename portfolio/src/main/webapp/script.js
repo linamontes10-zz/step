@@ -57,9 +57,9 @@ function addSongToPage(song) {
     artists += song.item.album.artists[iterator].name + ", ";
   }
   
-  document.getElementById("currently-playing").innerText =
-    song.item.name + " by " + artists + " at " + formatAsMinutesAndSeconds(song.progress_ms) + " of " + formatAsMinutesAndSeconds(
-    song.item.duration_ms);
+  document.getElementById("currently-playing").innerText = song.item.name + " by "
+    + artists + " at " + formatAsMinutesAndSeconds(song.progress_ms) + " of " +
+    formatAsMinutesAndSeconds(song.item.duration_ms);
 }
 
 function addRandomFunFact() {
