@@ -24,10 +24,10 @@
 function addRandomFunFact() {
     const funFacts =
       ['I am a Capricorn sun, Aquarius Moon, and Cancer rising.',
-          'I am fluent in Spanish and English.',
-          'I adopted a dog when I was 15, and his name is Austin!',
-          'I am a first-generation college student.',
-          'I used to play soccer competetively in high school.'];
+        'I am fluent in Spanish and English.',
+        'I adopted a dog when I was 15, and his name is Austin!',
+        'I am a first-generation college student.',
+        'I used to play soccer competetively in high school.'];
 
     // Pick a random greeting.
     const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
