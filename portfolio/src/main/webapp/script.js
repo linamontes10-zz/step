@@ -39,6 +39,6 @@ function addRandomFunFact() {
 
 async function addContent() {
   const response = await fetch('/data');
-  const hello = await response.text();
-  document.getElementById('data').innerHTML = hello;
+  const helloQuote = await response.text();
+  document.getElementById('data').innerHTML = helloQuote;
 }
