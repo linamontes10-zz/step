@@ -28,11 +28,17 @@ function addRandomFunFact() {
         'I adopted a dog when I was 15, and his name is Austin!',
         'I am a first-generation college student.',
         'I used to play soccer competetively in high school.'];
-  
+
     // Pick a random greeting.
     const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
 
     // Add it to the page.
     const funFactContainer = document.getElementById('fun-fact-container');
     funFactContainer.innerText = funFact;
+}
+
+async function addContent() {
+  const response = await fetch('/data');
+  const helloQuote = await response.text();
+  document.getElementById('data').innerHTML = helloQuote;
 }
