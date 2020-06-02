@@ -16,51 +16,10 @@
  * Adds a random fun fact to the page.
  */
 
-function formatAsMinutesAndSeconds(milliseconds) {
-  const minutes = Math.floor(milliseconds / 60000);
-  const seconds = ((milliseconds % 60000) / 1000).toFixed(0)
-  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-}
-
-function getCurrentlyPlayingSong() {
-  $.get("./auth.txt", function(data) {
-    let oauthToken = data;
-    const response = fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + oauthToken
-      }
-    })
-    response.then(handleReponse);
-  });
-}
-
-setInterval(function() {
-  getCurrentlyPlayingSong();
-}, 10000);
-
-function handleReponse(response) {
-
-  const text = response.json();
-
-  text.then(addSongToPage)
-}
-
-function addSongToPage(song) {
-  let artists = "";
-
-  for (let iterator = 0; iterator < song.item.album.artists.length; iterator++) {
-    if (iterator == song.item.album.artists.length - 1) {
-      artists += song.item.album.artists[iterator].name;
-      break;
-    }
-    artists += song.item.album.artists[iterator].name + ", ";
-  }
-  
-  document.getElementById("currently-playing").innerText = song.item.name + " by "
-    + artists + " at " + formatAsMinutesAndSeconds(song.progress_ms) + " of " +
-    formatAsMinutesAndSeconds(song.item.duration_ms);
-}
+// Spotify API keys to be used for later
+// var client_id = '444dda318d8949cb9282d95a9885a7c6';
+// var client_secret = '9f81ba6cf5748ef9d24a7ddb1e8bc4c';
+// var redirect_uri = 'https://8080-dot-12317386-dot-devshell.appspot.com/misc.html';
 
 function addRandomFunFact() {
     const funFacts =
@@ -76,10 +35,4 @@ function addRandomFunFact() {
     // Add it to the page.
     const funFactContainer = document.getElementById('fun-fact-container');
     funFactContainer.innerText = funFact;
-}
-
-async function addContent() {
-  const response = await fetch('/data');
-  const hello = await response.text();
-  document.getElementById('data').innerHTML = hello;
 }
