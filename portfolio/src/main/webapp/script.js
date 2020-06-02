@@ -36,3 +36,9 @@ function addRandomFunFact() {
     const funFactContainer = document.getElementById('fun-fact-container');
     funFactContainer.innerText = funFact;
 }
+
+async function addContent() {
+  const response = await fetch('/data');
+  const hello = await response.text();
+  document.getElementById('data').innerHTML = hello;
+}
