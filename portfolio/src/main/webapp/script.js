@@ -44,7 +44,7 @@ async function addContent() {
 }
 
 /**
- * Fetches messahes from the servers and adds them to the DOM.
+ * Fetches messages from the servers and adds them to the DOM.
  */
 function getMessages() {
   fetch('/data').then(response => response.json()).then((messages) => {
