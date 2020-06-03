@@ -13,54 +13,23 @@
 // limitations under the License.
 
 /**
- * Adds a random fun fact to the page.
+ * Adds currently playing song to the page.
  */
 
-function formatAsMinutesAndSeconds(milliseconds) {
-  const minutes = Math.floor(milliseconds / 60000);
-  const seconds = ((milliseconds % 60000) / 1000).toFixed(0)
-  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-}
 
-function getCurrentlyPlayingSong() {
-  $.get("./auth.txt", function(data) {
-    let oauthToken = data;
-    const response = fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + oauthToken
-      }
-    })
-    response.then(handleReponse);
-  });
+async function getCurrentlyPlayingSongAsync() {
+  const response = await fetch("/spotify");
+  const song = await response.text();
+  document.getElementById("currently-playing").innerText = song;
 }
 
 setInterval(function() {
-  getCurrentlyPlayingSong();
+  getCurrentlyPlayingSongAsync();
 }, 10000);
 
-function handleReponse(response) {
-
-  const text = response.json();
-
-  text.then(addSongToPage)
-}
-
-function addSongToPage(song) {
-  let artists = "";
-
-  for (let iterator = 0; iterator < song.item.album.artists.length; iterator++) {
-    if (iterator == song.item.album.artists.length - 1) {
-      artists += song.item.album.artists[iterator].name;
-      break;
-    }
-    artists += song.item.album.artists[iterator].name + ", ";
-  }
-  
-  document.getElementById("currently-playing").innerText =
-    song.item.name + " by " + artists + " at " + formatAsMinutesAndSeconds(song.progress_ms) + " of " + formatAsMinutesAndSeconds(
-    song.item.duration_ms);
-}
+/**
+ * Adds a random fun fact to the page.
+ */
 
 function addRandomFunFact() {
     const funFacts =
