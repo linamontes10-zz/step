@@ -42,3 +42,13 @@ async function addContent() {
   const helloQuote = await response.text();
   document.getElementById('data').innerHTML = helloQuote;
 }
+
+/**
+ * Fetches messages from the servers and adds them to the DOM.
+ */
+function getMessages() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+    console.log(messages);
+    document.getElementById('messages-container').innerHTML = messages;
+  })
+}
