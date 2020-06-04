@@ -26,20 +26,27 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private final ArrayList<String> comments = new ArrayList<String>();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ArrayList<String> messages = new ArrayList<String>();
-      messages.add("Hi");
-      messages.add("Hello");
-      messages.add("Whatsup!");
-    String json = convertToJsonUsingGson(messages);
-    response.setContentType("application/json;");
+    String json = convertToJsonUsingGson(comments);
+    response.setContentType("application/json");
     response.getWriter().println(json);
   }
 
-  private String convertToJsonUsingGson(ArrayList<String> messages) {
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String commentString = request.getParameter("comment-input");
+    String nameString = request.getParameter("name-input");
+
+    comments.add(commentString + " by " + nameString);
+    response.sendRedirect("/index.html");
+  }
+
+  private String convertToJsonUsingGson(ArrayList<String> comments) {
     Gson gson = new Gson();
-    String json = gson.toJson(messages);
+    String json = gson.toJson(comments);
     return json;
   }
 }
