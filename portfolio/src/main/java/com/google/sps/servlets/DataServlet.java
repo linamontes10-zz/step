@@ -32,17 +32,20 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private final ArrayList<String> comments = new ArrayList<String>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+    // Query is sorted in descending order to show most recent comment entitites first
+    Query query = new Query("Comment").addSort("timestampMs", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
+    ArrayList<String> comments = new ArrayList<String>();
+    
     for (Entity commentEntity : results.asIterable()) {
       String comment = (String) commentEntity.getProperty("comment");
       String name = (String) commentEntity.getProperty("name");
+      comments.add(comment + " by " + name);
     }
 
     String jsonComments = convertToJsonUsingGson(comments);
@@ -54,14 +57,14 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String commentString = request.getParameter("comment-input");
     String nameString = request.getParameter("name-input");
-    long timestamp = System.currentTimeMillis();
+    long timestampMs = System.currentTimeMillis();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("comment", commentString);
     commentEntity.setProperty("name", nameString);
-    commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("timestampMs", timestampMs);
 
     datastore.put(commentEntity);
     response.sendRedirect("/index.html");
