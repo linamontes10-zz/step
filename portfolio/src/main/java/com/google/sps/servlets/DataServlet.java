@@ -14,6 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.util.ArrayList;
 import com.google.gson.Gson;
@@ -30,17 +36,34 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJsonUsingGson(comments);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity commentEntity : results.asIterable()) {
+      String comment = (String) commentEntity.getProperty("comment");
+      String name = (String) commentEntity.getProperty("name");
+    }
+
+    String jsonComments = convertToJsonUsingGson(comments);
     response.setContentType("application/json");
-    response.getWriter().println(json);
+    response.getWriter().println(jsonComments);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String commentString = request.getParameter("comment-input");
     String nameString = request.getParameter("name-input");
+    long timestamp = System.currentTimeMillis();
 
-    comments.add(commentString + " by " + nameString);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("comment", commentString);
+    commentEntity.setProperty("name", nameString);
+    commentEntity.setProperty("timestamp", timestamp);
+
+    datastore.put(commentEntity);
     response.sendRedirect("/index.html");
   }
 
