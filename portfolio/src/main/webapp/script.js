@@ -52,7 +52,6 @@ async function displayComments() {
     commentsResult = "Uh-oh, there are no comments to display! You can add one below.";
   }
 
-  console.log(comments);
   document.getElementById('comments-container').innerText = commentsResult;
 }
 
