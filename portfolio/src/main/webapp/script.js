@@ -49,7 +49,7 @@ async function displayComments() {
   if (comments.length) {
     commentsResult = comments.join('\n\n');
   } else {
-    commentsResult = "Uh-oh, there are no comments do display! You can add one below.";
+    commentsResult = "Uh-oh, there are no comments to display! You can add one below.";
   }
 
   console.log(comments);

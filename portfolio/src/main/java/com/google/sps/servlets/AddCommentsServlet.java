@@ -33,6 +33,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/add-comments")
 public class AddCommentsServlet extends HttpServlet {
 
+  public final Integer COMMENT_MAXIMUM = 100;
+  public final Integer COMMENT_MINIMUM = 0;
+  public final Integer DEFAULT_COMMENT_LIMIT = 10;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
@@ -90,14 +94,14 @@ public class AddCommentsServlet extends HttpServlet {
       commentLimit = Integer.parseInt(commentLimitString);
     } catch (NumberFormatException e) {
       // Set default value for comment limit if parsing fails
-      return commentLimit = 10;
+      return DEFAULT_COMMENT_LIMIT;
     }
 
     // Enforce boundaries on the comment limit as per the HTML input
-    if (commentLimit < 0) {
-      commentLimit = 0;
-    } else if (commentLimit > 100) {
-      commentLimit = 100;
+    if (commentLimit < COMMENT_MINIMUM) {
+      commentLimit = COMMENT_MINIMUM;
+    } else if (commentLimit > COMMENT_MAXIMUM) {
+      commentLimit = COMMENT_MAXIMUM;
     }
 
     return commentLimit;

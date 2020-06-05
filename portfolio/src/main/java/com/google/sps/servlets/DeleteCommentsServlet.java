@@ -37,8 +37,6 @@ public class DeleteCommentsServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    // Query is sorted in descending order to show most recent comment entitites first
     Query query = new Query("Comment");
     PreparedQuery results = datastore.prepare(query);
 
