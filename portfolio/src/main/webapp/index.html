@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="addContent()">
+  <body onload="displayComments()">
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="misc.html">For Fun</a></li>
@@ -15,7 +15,6 @@
     </ul>
     <div id="content">
       <h1 id="title">Lina's Portfolio</h1>
-      <div id="data"></div>
       <p>Welcome to my portfolio! My name is Lina, and I'm a Latina in Tech currently interning at 
           Google as a STEP intern. I am a rising Junior at Yale!</p> 
       <p>I was born and raised in New  York, but my family is from Colombia.</p>
@@ -24,10 +23,14 @@
       <p>Click here to get a random fun fact about me:</p>
       <button onclick="addRandomFunFact()">Hello</button>
       <div id="fun-fact-container"></div>
-      <h1>Messages</h1>
-      <p>Click here to see messages from the server:</p>
-      <button onclick="getMessages()">Fetch server messages!</button>
-      <div id="messages-container"></div>
+
+      <h1>Comments:</h1>
+      <label for="comment-limit">Enter the limit on the number of comments you want to display:</label>
+      <input type="number" id="comment-limit" name="comment-limit" min="0" max ="100" value = "10" onchange="displayComments()">
+      <br/><br/>
+      <div id="comments-container"></div>
+
+      <br/><br/>
 
       <form action="/data" method="POST">
         <p>Enter a comment:</p>

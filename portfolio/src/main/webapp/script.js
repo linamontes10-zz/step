@@ -44,11 +44,20 @@ async function addContent() {
 }
 
 /**
- * Fetches messages from the servers and adds them to the DOM.
+ * Fetches comments from the server and adds them to the DOM.
  */
-async function getMessages() {
-  const response = await fetch('/data');
-  const messages = await response.json();
-  console.log(messages);
-  document.getElementById('messages-container').innerText = messages;
+async function displayComments() {
+  const commentLimit = document.getElementById("comment-limit").value;
+  const response = await fetch(`/data?comment-limit=${commentLimit}`);
+  const comments = await response.json();
+  let commentsResult;
+
+  if (comments.length) {
+    commentsResult = comments.join('\n\n');
+  } else {
+    commentsResult = "Uh-oh, there are no comments do display! You can add one below.";
+  }
+
+  console.log(comments);
+  document.getElementById('comments-container').innerText = commentsResult;
 }
