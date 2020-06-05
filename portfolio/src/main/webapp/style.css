@@ -9,11 +9,30 @@ button {
   font-family: 'Courier New', Courier, monospace;
 }
 
+#comments-container {
+  outline: 2px dashed lightblue;
+  width: 600px;
+}
+
 #content {
   color: lightslategray;
   margin-left: auto;
   margin-right: auto;
   width: 850px;
+}
+
+#delete {
+  background-color: lightcoral;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 14px 20px;
+}
+
+#delete:hover {
+  background-color: firebrick;
 }
 
 #greeting-container {
@@ -24,10 +43,43 @@ img {
   width: 25%;
 }
 
+input[type=number] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 12px 20px;
+}
+
+input[type=submit] {
+  background-color: lightblue;
+  border-radius: 4px;
+  color: lightslategray;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 14px 20px;
+}
+
+input[type=submit]:hover {
+  background-color: lightskyblue;
+}
+
 li {
   display: inline;
 }
 
+textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 8px 0;
+  padding: 12px 20px;
+  width: 100%;
+}
 
 #title {
   color: lightblue;

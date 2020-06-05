@@ -37,18 +37,32 @@ function addRandomFunFact() {
     funFactContainer.innerText = funFact;
 }
 
-async function addContent() {
-  const response = await fetch('/data');
-  const helloQuote = await response.text();
-  document.getElementById('data').innerHTML = helloQuote;
+/**
+ * Fetches comments from the server and adds them to the DOM.
+ */
+async function displayComments() {
+  const commentLimit = document.getElementById("comment-limit").value;
+  const response = await fetch(`/add-comments?comment-limit=${commentLimit}`);
+  const comments = await response.json();
+  let commentsResult;
+
+  if (comments.length) {
+    commentsResult = comments.join('\n\n');
+  } else {
+    commentsResult = "Uh-oh, there are no comments to display! You can add one below.";
+  }
+
+  document.getElementById('comments-container').innerText = commentsResult;
 }
 
 /**
- * Fetches messages from the servers and adds them to the DOM.
+ * Deletes comments from the server, removes them from the DOM, and updates the display.
  */
-async function getMessages() {
-  const response = await fetch('/data');
-  const messages = await response.json();
-  console.log(messages);
-  document.getElementById('messages-container').innerText = messages;
+async function deleteComments() {
+  const result = window.confirm("Are you sure you want to delete all the comments?")
+
+  if (result) {
+    await fetch('/delete-comments', {method: 'POST'});
+    displayComments();
+  }
 }
