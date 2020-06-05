@@ -32,7 +32,7 @@
 
       <br/><br/>
 
-      <form action="/data" method="POST">
+      <form action="/add-comments" method="POST">
         <p>Enter a comment:</p>
         <textarea name="comment-input" placeholder="I love your website! :)"></textarea>
         <br/><br/>
@@ -43,7 +43,7 @@
 
         <input type="submit" />
       </form>
-
+      <button onclick="deleteComments()" id="delete">Delete All Comments</button>
     </div>
   </body>
 </html>

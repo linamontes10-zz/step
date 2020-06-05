@@ -21,6 +21,20 @@ button {
   width: 850px;
 }
 
+#delete {
+  background-color: lightcoral;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 14px 20px;
+}
+
+#delete:hover {
+  background-color: firebrick;
+}
+
 #greeting-container {
   margin-top: 20px;
 }

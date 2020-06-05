@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that handles comments data using Datastore */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+/** Servlet that adds comments data using Datastore */
+@WebServlet("/add-comments")
+public class AddCommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
