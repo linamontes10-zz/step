@@ -29,41 +29,42 @@ img {
   width: 25%;
 }
 
-li {
-  display: inline;
-}
-
 input[type=number] {
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 12px 20px;
 }
 
 input[type=submit] {
   background-color: lightblue;
-  border: none;
   border-radius: 4px;
   color: lightslategray;
   cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
   margin: 8px 0;
   padding: 14px 20px;
 }
 
 input[type=submit]:hover {
-  background-color: lightcyan;
+  background-color: lightskyblue;
+}
+
+li {
+  display: inline;
 }
 
 textarea {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  display: inline-block;
+  margin: 8px 0;
+  width: 100%;
+  padding: 12px 20px;
 }
 
 #title {
