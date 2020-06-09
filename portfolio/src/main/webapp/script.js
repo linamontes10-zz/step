@@ -36,9 +36,15 @@ function addRandomFunFact() {
  */
 function formatSentimentComments(commentsJson) {
 
+  console.log(commentsJson.sentimentScores);
+
   for (comment in commentsJson.comments) {
-    let sentimentScore = commentsJson.scores[comment];
+    let commentNumber = commentsJson.comments.length - comment;
+    let sentimentScore = commentsJson.sentimentScores[comment];
     let gif = document.createElement('img');
+    let commentDiv = document.createElement('div');
+    commentDiv.setAttribute('id', `comment-${commentNumber}`);
+    commentDiv.setAttribute('class', 'comment');
 
     if (sentimentScore > 0.4) {
       gif.setAttribute('src', '/images/happy.gif');
@@ -47,9 +53,9 @@ function formatSentimentComments(commentsJson) {
     } else {
       gif.setAttribute('src', '/images/neutral.gif');
     }
-    document.getElementById('comments-container').innerText +=
-        commentsJson.comments[comment] + "\n\n";
-    document.getElementById('comments-container').appendChild(gif);
+    document.getElementById('comments-container').appendChild(commentDiv);
+    document.getElementById(`comment-${commentNumber}`).innerText = commentsJson.comments[comment];
+    document.getElementById(`comment-${commentNumber}`).appendChild(gif);
   }
 }
 
@@ -60,8 +66,8 @@ async function displayComments() {
   const commentLimit = document.getElementById("comment-limit").value;
   const response = await fetch(`/add-comments?comment-limit=${commentLimit}`);
   const commentsJson = await response.json();
-
-  if (commentsJson.length) {
+  console.log(commentsJson);
+  if (commentsJson) {
     formatSentimentComments(commentsJson);
   } else {
     document.getElementById('comments-container').innerText =

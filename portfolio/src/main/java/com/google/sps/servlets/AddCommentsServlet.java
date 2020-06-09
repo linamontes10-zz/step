@@ -25,6 +25,7 @@ import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.gson.Gson;
+import com.google.sps.commentSentiment.CommentSentiment;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
@@ -32,15 +33,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CommentSentiment {
-  Arraylist<String> comments;
-  ArrayList<Doubles> sentimentScores;
-
-  CommentSentiment() {
-    this.comments = new ArrayList<String>();
-    this.sentimentScores = new ArrayList<Double>();
-  }
-}
 
 /** Servlet that adds comments and determines sentiment using Datastore and NLP */
 @WebServlet("/add-comments")
@@ -64,12 +56,12 @@ public class AddCommentsServlet extends HttpServlet {
     for (Entity commentEntity : results.asIterable(FetchOptions.Builder.withLimit(commentLimit))) {
       String comment = (String) commentEntity.getProperty("comment");
       String name = (String) commentEntity.getProperty("name");
-      Double sentimentScore = (Double) entity.getProperty("sentimentScore");
+      Double sentimentScore = (Double) commentEntity.getProperty("sentimentScore");
       commentSentiment.comments.add(comment + " by " + name);
       commentSentiment.sentimentScores.add(sentimentScore);
     }
 
-    String jsonComments = convertToJsonUsingGson(commentSentiment);
+    String jsonComments = new Gson().toJson(commentSentiment);
     response.setContentType("application/json");
     response.getWriter().println(jsonComments);
   }
@@ -81,7 +73,7 @@ public class AddCommentsServlet extends HttpServlet {
     long timestampMs = System.currentTimeMillis();
 
     Document doc =
-        Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+        Document.newBuilder().setContent(commentString).setType(Document.Type.PLAIN_TEXT).build();
     LanguageServiceClient languageService = LanguageServiceClient.create();
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
     float sentimentScore = sentiment.getScore();
@@ -108,7 +100,7 @@ public class AddCommentsServlet extends HttpServlet {
   /** Returns the comment limit given by the user. */
   private int getCommentLimit(HttpServletRequest request) {
     String commentLimitString = request.getParameter("comment-limit");
- 
+
     int commentLimit;
 
     try {
