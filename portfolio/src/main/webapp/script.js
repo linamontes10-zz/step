@@ -66,12 +66,12 @@ async function displayComments() {
   const commentLimit = document.getElementById("comment-limit").value;
   const response = await fetch(`/add-comments?comment-limit=${commentLimit}`);
   const commentsJson = await response.json();
-  console.log(commentsJson);
+  const noCommentsMessage = "Uh-oh, there are no comments to display! You can add one below.";
+
   if (commentsJson) {
     formatSentimentComments(commentsJson);
   } else {
-    document.getElementById('comments-container').innerText =
-        "Uh-oh, there are no comments to display! You can add one below.";
+    document.getElementById('comments-container').innerText = noCommentsMessage;
   }
 }
 
