@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that deletes comments data using Datastore */
+/** Servlet that deletes comments data using Datastore. */
 @WebServlet("/delete-comments")
 public class DeleteCommentsServlet extends HttpServlet {
 

@@ -21,7 +21,11 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.gson.Gson;
+import com.google.sps.commentSentiment.CommentSentiment;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +33,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that adds comments data using Datastore */
+
+/** Servlet that adds comments and determines sentiment using Datastore and NLP. */
 @WebServlet("/add-comments")
 public class AddCommentsServlet extends HttpServlet {
 
@@ -39,24 +44,24 @@ public class AddCommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     int commentLimit = getCommentLimit(request);
-    
+
+    CommentSentiment commentSentiment = new CommentSentiment();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // Query is sorted in descending order to show most recent comment entitites first
     Query query = new Query("Comment").addSort("timestampMs", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    ArrayList<String> comments = new ArrayList<String>();
-    
     for (Entity commentEntity : results.asIterable(FetchOptions.Builder.withLimit(commentLimit))) {
       String comment = (String) commentEntity.getProperty("comment");
       String name = (String) commentEntity.getProperty("name");
-      comments.add(comment + " by " + name);
+      Double sentimentScore = (Double) commentEntity.getProperty("sentimentScore");
+      commentSentiment.comments.add(comment + " by " + name);
+      commentSentiment.sentimentScores.add(sentimentScore);
     }
 
-    String jsonComments = convertToJsonUsingGson(comments);
+    String jsonComments = new Gson().toJson(commentSentiment);
     response.setContentType("application/json");
     response.getWriter().println(jsonComments);
   }
@@ -67,11 +72,19 @@ public class AddCommentsServlet extends HttpServlet {
     String nameString = request.getParameter("name-input");
     long timestampMs = System.currentTimeMillis();
 
+    Document doc =
+        Document.newBuilder().setContent(commentString).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float sentimentScore = sentiment.getScore();
+    languageService.close();
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("comment", commentString);
     commentEntity.setProperty("name", nameString);
+    commentEntity.setProperty("sentimentScore", sentimentScore);
     commentEntity.setProperty("timestampMs", timestampMs);
 
     datastore.put(commentEntity);
