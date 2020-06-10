@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-/** Servlet that adds comments and determines sentiment using Datastore and NLP */
+/** Servlet that adds comments and determines sentiment using Datastore and NLP. */
 @WebServlet("/add-comments")
 public class AddCommentsServlet extends HttpServlet {
 
