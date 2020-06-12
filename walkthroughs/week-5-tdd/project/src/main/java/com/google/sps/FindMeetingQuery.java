@@ -15,9 +15,50 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class FindMeetingQuery {
+
+  public final int duration = 0;
+  public final Boolean notInclusive = false;
+  public final Boolean inclusive = true;
+
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();
+
+    List<TimeRange> availableEventTimes = new ArrayList<>();
+    events.stream()
+          .sorted((firstRange, secondRange) -> firstRange.getWhen().start() - secondRange.getWhen().start())
+          .forEach(e-> {
+            boolean attendee = !Collections.disjoint(e.getAttendees(), attendees);
+            if (attendee) {
+              availableEventTimes.add(e.getWhen());
+            }
+          });
+
+    availableEventTimes.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY, duration));
+    List<TimeRange> availableMeetingTimes = new ArrayList<TimeRange>();
+    int meetingStartRequest = TimeRange.START_OF_DAY;
+
+    for (int iterator = 0; iterator < availableEventTimes.size() - 1; iterator++) {
+      int timeRangeStart = availableEventTimes.get(iterator).start();
+      TimeRange availableTimeRange = TimeRange.fromStartEnd(meetingStartRequest, timeRangeStart, notInclusive);
+      availableMeetingTimes.add(availableTimeRange);
+      meetingStartRequest = availableEventTimes.get(iterator).end();
+
+      while (iterator < availableEventTimes.size() - 1 && availableEventTimes.get(iterator + 1).start() <= meetingStartRequest) {
+        iterator++;
+        meetingStartRequest = Math.max(meetingStartRequest, availableEventTimes.get(iterator).end());
+      }
+    }
+
+    availableMeetingTimes.add(TimeRange.fromStartEnd(meetingStartRequest, TimeRange.END_OF_DAY, inclusive));
+
+    return availableMeetingTimes.stream()
+                                .filter(time -> time.duration() >= request.getDuration())
+                                .collect(Collectors.toList());
   }
 }
