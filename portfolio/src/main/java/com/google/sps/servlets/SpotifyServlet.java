@@ -59,8 +59,8 @@ public class SpotifyServlet extends HttpServlet {
   }
 
   public static String formatAsMinutesAndSeconds(Integer milliseconds) {
-    Integer seconds = (Integer)(milliseconds/ 1000) % 60;
-    Integer minutes = (Integer)(milliseconds/ (1000) / 60);
+    Integer seconds = (Integer)(milliseconds / 1000) % 60;
+    Integer minutes = (Integer)(milliseconds / (1000) / 60);
     return String.format("%d:%02d", minutes, seconds);
   }
 
@@ -105,27 +105,29 @@ public class SpotifyServlet extends HttpServlet {
       if (item instanceof Track) {
         songName = ((Track)item).getName();
 
-        for (int iterator = 0; iterator < ((Track)item).getArtists().length; iterator++) {
-          if (iterator == ((Track)item).getArtists().length - 1) {
-            artists += ((Track)item).getArtists()[iterator].getName();
+        for (int i = 0; i < ((Track)item).getArtists().length; i++) {
+          if (i == ((Track)item).getArtists().length - 1) {
+            artists += ((Track)item).getArtists()[i].getName();
             break;
           }
-          artists += ((Track)item).getArtists()[iterator].getName() + ", ";
+          artists += ((Track)item).getArtists()[i].getName() + ", ";
         }
+
+        Integer progressMilliseconds = currentlyPlaying.getProgress_ms();
+        Integer durationMilliseconds = ((Track)item).getDurationMs();
+
+        String currentSongString = songName + " by " + artists + " at " +
+                                  formatAsMinutesAndSeconds(progressMilliseconds) +
+                                  " of " + formatAsMinutesAndSeconds(durationMilliseconds);
+
+        return currentSongString;
+      } else {
+        return "No song currently plaing.";
       }
-
-      Integer progressMilliseconds = currentlyPlaying.getProgress_ms();
-      Integer durationMilliseconds = ((Track)item).getDurationMs();
-
-      String currentSongString = songName + " by " + artists + " at " +
-                                 formatAsMinutesAndSeconds(progressMilliseconds) +
-                                 " of " + formatAsMinutesAndSeconds(durationMilliseconds);
-
-      return currentSongString;
     } catch (CompletionException e) {
-      return "No song currenly playing.";
+      return "No song currently playing.";
     } catch (CancellationException e) {
-      return "Error receiving currenly playing song.";
+      return "Error receiving currently playing song.";
     }
   }
 
