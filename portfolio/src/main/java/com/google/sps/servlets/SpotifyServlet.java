@@ -117,9 +117,11 @@ public class SpotifyServlet extends HttpServlet {
       Integer progressMilliseconds = currentlyPlaying.getProgress_ms();
       Integer durationMilliseconds = ((Track)item).getDurationMs();
 
-      return (songName + " by " + artists + " at " +
-              formatAsMinutesAndSeconds(progressMilliseconds) +
-              " of " + formatAsMinutesAndSeconds(durationMilliseconds));
+      String currentSongString = songName + " by " + artists + " at " +
+                                 formatAsMinutesAndSeconds(progressMilliseconds) +
+                                 " of " + formatAsMinutesAndSeconds(durationMilliseconds);
+
+      return currentSongString;
     } catch (CompletionException e) {
       return "No song currenly playing.";
     } catch (CancellationException e) {
