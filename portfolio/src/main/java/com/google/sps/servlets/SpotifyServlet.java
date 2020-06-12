@@ -66,10 +66,10 @@ public class SpotifyServlet extends HttpServlet {
 
   public static void authorizationCode() {
     try {
-      final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
-      spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-      spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-      System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+      final AuthorizationCodeCredentials authCodeCreds = authorizationCodeRequest.execute();
+      spotifyApi.setAccessToken(authCodeCreds.getAccessToken());
+      spotifyApi.setRefreshToken(authCodeCreds.getRefreshToken());
+      System.out.println("Expires in: " + authCodeCreds.getExpiresIn());
     } catch (IOException | SpotifyWebApiException | ParseException e) {
       System.out.println("Error: " + e.getMessage());
     }
@@ -77,12 +77,12 @@ public class SpotifyServlet extends HttpServlet {
 
   public static void authorizationCodeRefresh() {
     try {
-      final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+      final AuthorizationCodeCredentials authCodeCreds = AuthorizationCodeRefreshRequest.execute();
  
-      spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-      spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+      spotifyApi.setAccessToken(authCodeCreds.getAccessToken());
+      spotifyApi.setRefreshToken(authCodeCreds.getRefreshToken());
  
-      System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+      System.out.println("Expires in: " + authCodeCreds.getExpiresIn());
     } catch (IOException | SpotifyWebApiException | ParseException e) {
       System.out.println("Error: " + e.getMessage());
     }
