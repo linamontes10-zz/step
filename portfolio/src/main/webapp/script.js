@@ -15,8 +15,6 @@
 /**
  * Adds currently playing song to the page.
  */
-
-
 async function getCurrentlyPlayingSongAsync() {
   const response = await fetch("/spotify");
   const song = await response.text();
@@ -30,7 +28,6 @@ setInterval(function() {
 /**
  * Adds a random fun fact to the page.
  */
-
 function addRandomFunFact() {
     const funFacts =
       ['I am a Capricorn sun, Aquarius Moon, and Cancer rising.',
