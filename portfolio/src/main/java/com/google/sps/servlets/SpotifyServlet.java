@@ -140,12 +140,13 @@ public class SpotifyServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    callbackAuth = request.getParameter("code");
 
-    if (oauthToken.isEmpty() && request.getParameter("code") == null) {
+    if (oauthToken.isEmpty() && callbackAuth == null) {
       response.sendRedirect(authorizationCodeUri());
       return;
-    } else if (oauthToken.isEmpty() && request.getParameter("code") != null) {
-      oauthToken = request.getParameter("code");
+    } else if (oauthToken.isEmpty() && callbackAuth != null) {
+      oauthToken = callbackAuth;
       authorizationCodeRequest = spotifyApi.authorizationCode(oauthToken).build();
       authorizationCode();
       getUsersCurrentlyPlayingTrackRequest = spotifyApi.getUsersCurrentlyPlayingTrack().build();
