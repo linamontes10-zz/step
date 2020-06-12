@@ -90,9 +90,8 @@ public class SpotifyServlet extends HttpServlet {
 
   public static String getCurrentTrack() {
     try {
-      final CompletableFuture<CurrentlyPlaying> currentlyPlayingFuture = getUsersCurrentlyPlayingTrackRequest.executeAsync();
-
-      final CurrentlyPlaying currentlyPlaying = currentlyPlayingFuture.join();
+      final CurrentlyPlaying currentlyPlaying = getUsersCurrentlyPlayingTrackRequest.execute();
+      String finalString = null;
 
       if (currentlyPlaying == null) {
         return "No song currently playing.";
@@ -113,17 +112,25 @@ public class SpotifyServlet extends HttpServlet {
           artists += ((Track)item).getArtists()[i].getName() + ", ";
         }
 
+        // String.join(", ", ((Track)item).getArtists());
+
         Integer progressMilliseconds = currentlyPlaying.getProgress_ms();
         Integer durationMilliseconds = ((Track)item).getDurationMs();
 
         String currentSongString = songName + " by " + artists + " at " +
                                   formatAsMinutesAndSeconds(progressMilliseconds) +
                                   " of " + formatAsMinutesAndSeconds(durationMilliseconds);
-
-        return currentSongString;
+        finalString = currentSongString;
       } else {
-        return "No song currently plaing.";
+        finalString = "No song currently playing.";
       }
+      return finalString;
+    } catch (IOException | SpotifyWebApiException | ParseException e) {
+      System.out.println("Error: " + e.getMessage());
+      authorizationCodeRefresh();
+      authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
+      getUsersCurrentlyPlayingTrackRequest = spotifyApi.getUsersCurrentlyPlayingTrack().build();
+      return "Fetching currently playing song...";
     } catch (CompletionException e) {
       return "No song currently playing.";
     } catch (CancellationException e) {
