@@ -22,40 +22,42 @@ import java.util.stream.Collectors;
 
 public final class FindMeetingQuery {
 
-  public final int duration = 0;
-  public final Boolean notInclusive = false;
-  public final Boolean inclusive = true;
+  public final int DURATION = 0;
+  public final Boolean NOT_INCLUSIVE = false;
+  public final Boolean INCLUSIVE = true;
 
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();
 
     List<TimeRange> availableEventTimes = new ArrayList<>();
     events.stream()
-          .sorted((firstRange, secondRange) -> firstRange.getWhen().start() - secondRange.getWhen().start())
-          .forEach(e-> {
-            boolean attendee = !Collections.disjoint(e.getAttendees(), attendees);
-            if (attendee) {
+          .sorted((firstRange, secondRange) ->
+                   firstRange.getWhen().start() - secondRange.getWhen().start())
+          .forEach(e -> {
+            boolean attendeeInEvent = !Collections.disjoint(e.getAttendees(), attendees);
+            if (attendeeInEvent) {
               availableEventTimes.add(e.getWhen());
             }
           });
 
-    availableEventTimes.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY, duration));
+    availableEventTimes.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY, DURATION));
     List<TimeRange> availableMeetingTimes = new ArrayList<TimeRange>();
-    int meetingStartRequest = TimeRange.START_OF_DAY;
+    int lastRangeEnd = TimeRange.START_OF_DAY;
 
-    for (int iterator = 0; iterator < availableEventTimes.size() - 1; iterator++) {
-      int timeRangeStart = availableEventTimes.get(iterator).start();
-      TimeRange availableTimeRange = TimeRange.fromStartEnd(meetingStartRequest, timeRangeStart, notInclusive);
+    for (int i = 0; i < availableEventTimes.size() - 1; i++) {
+      int timeRangeStart = availableEventTimes.get(i).start();
+      TimeRange availableTimeRange = TimeRange.fromStartEnd(lastRangeEnd, timeRangeStart, NOT_INCLUSIVE);
       availableMeetingTimes.add(availableTimeRange);
-      meetingStartRequest = availableEventTimes.get(iterator).end();
+      lastRangeEnd = availableEventTimes.get(i).end();
 
-      while (iterator < availableEventTimes.size() - 1 && availableEventTimes.get(iterator + 1).start() <= meetingStartRequest) {
-        iterator++;
-        meetingStartRequest = Math.max(meetingStartRequest, availableEventTimes.get(iterator).end());
+      while (i < availableEventTimes.size() - 1 &&
+             availableEventTimes.get(i + 1).start() <= lastRangeEnd) {
+        i++;
+        lastRangeEnd = Math.max(lastRangeEnd, availableEventTimes.get(i).end());
       }
     }
 
-    availableMeetingTimes.add(TimeRange.fromStartEnd(meetingStartRequest, TimeRange.END_OF_DAY, inclusive));
+    availableMeetingTimes.add(TimeRange.fromStartEnd(lastRangeEnd, TimeRange.END_OF_DAY, INCLUSIVE));
 
     return availableMeetingTimes.stream()
                                 .filter(time -> time.duration() >= request.getDuration())
