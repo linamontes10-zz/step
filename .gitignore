@@ -1,4 +1,5 @@
 target/
 .idea
-portfolio/src/main/webapp/auth.txt
+portfolio/src/main/java/com/google/sps/SpotifyAuth.java
+
 

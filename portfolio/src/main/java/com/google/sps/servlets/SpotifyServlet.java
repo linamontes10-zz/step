@@ -1,10 +1,26 @@
+// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package com.google.sps.servlets;
 
+import com.google.sps.SpotifyAuth;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying;
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.IPlaylistItem;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
@@ -15,6 +31,7 @@ import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -25,24 +42,25 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/spotify")
 public class SpotifyServlet extends HttpServlet {
+  public static SpotifyAuth spotifyAuthKeys = new SpotifyAuth();
+  private static final String clientId = spotifyAuthKeys.getClientId();
+  private static final String clientSecret = spotifyAuthKeys.getClientSecret();
 
-  private static final String clientId = "444dda318d8949cb9282d95a9885a7c6";
-  private static final String clientSecret = "9f81b8a6cf5748ef9d24a7ddb1e8bc4c";
-  private static final String redirectUriString = "https://8080-b0939ef0-d7b7-4da5-abf9-d0bf54e01dcf.us-east1.cloudshell.dev/spotify";
+  private static final String redirectUriString = "https://linamontes-step-2020.ue.r.appspot.com/spotify";
   private static final URI redirectUri = SpotifyHttpManager.makeUri(redirectUriString);
   private static String oauthToken = "";
-  
+
   private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
     .setClientId(clientId)
     .setClientSecret(clientSecret)
     .setRedirectUri(redirectUri)
     .build();
-  
+
   private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
     .scope("user-read-currently-playing")
     .show_dialog(true)
     .build();
- 
+
   private static AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(oauthToken)
     .build();
 
@@ -77,11 +95,11 @@ public class SpotifyServlet extends HttpServlet {
 
   public static void authorizationCodeRefresh() {
     try {
-      final AuthorizationCodeCredentials authCodeCreds = AuthorizationCodeRefreshRequest.execute();
- 
+      final AuthorizationCodeCredentials authCodeCreds = authorizationCodeRefreshRequest.execute();
+
       spotifyApi.setAccessToken(authCodeCreds.getAccessToken());
       spotifyApi.setRefreshToken(authCodeCreds.getRefreshToken());
- 
+
       System.out.println("Expires in: " + authCodeCreds.getExpiresIn());
     } catch (IOException | SpotifyWebApiException | ParseException e) {
       System.out.println("Error: " + e.getMessage());
@@ -91,40 +109,33 @@ public class SpotifyServlet extends HttpServlet {
   public static String getCurrentTrack() {
     try {
       final CurrentlyPlaying currentlyPlaying = getUsersCurrentlyPlayingTrackRequest.execute();
-      String finalString = null;
 
       if (currentlyPlaying == null) {
         return "No song currently playing.";
       }
 
+      String finalSongString = "";
       IPlaylistItem item = currentlyPlaying.getItem();
-      String songName = "";
-      String artists = "";
-      
-      if (item instanceof Track) {
-        songName = ((Track)item).getName();
 
-        for (int i = 0; i < ((Track)item).getArtists().length; i++) {
-          if (i == ((Track)item).getArtists().length - 1) {
-            artists += ((Track)item).getArtists()[i].getName();
-            break;
-          }
-          artists += ((Track)item).getArtists()[i].getName() + ", ";
+      if (item instanceof Track) {
+        String songName = "";
+        songName = ((Track)item).getName();
+        ArrayList<String> artistsList = new ArrayList<String>();
+
+        for (ArtistSimplified artist : ((Track)item).getArtists()){
+          artistsList.add(artist.getName());
         }
 
-        // String.join(", ", ((Track)item).getArtists());
-
+        String artists =  String.join(", ", artistsList);
         Integer progressMilliseconds = currentlyPlaying.getProgress_ms();
         Integer durationMilliseconds = ((Track)item).getDurationMs();
-
-        String currentSongString = songName + " by " + artists + " at " +
-                                  formatAsMinutesAndSeconds(progressMilliseconds) +
-                                  " of " + formatAsMinutesAndSeconds(durationMilliseconds);
-        finalString = currentSongString;
+        finalSongString = songName + " by " + artists + " at " +
+                          formatAsMinutesAndSeconds(progressMilliseconds) +
+                          " of " + formatAsMinutesAndSeconds(durationMilliseconds);
       } else {
-        finalString = "No song currently playing.";
+        finalSongString = "No song currently playing.";
       }
-      return finalString;
+      return finalSongString;
     } catch (IOException | SpotifyWebApiException | ParseException e) {
       System.out.println("Error: " + e.getMessage());
       authorizationCodeRefresh();
@@ -140,7 +151,7 @@ public class SpotifyServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    callbackAuth = request.getParameter("code");
+    String callbackAuth = request.getParameter("code");
 
     if (oauthToken.isEmpty() && callbackAuth == null) {
       response.sendRedirect(authorizationCodeUri());
@@ -154,7 +165,6 @@ public class SpotifyServlet extends HttpServlet {
       response.sendRedirect("/misc.html");
       return;
     }
-
     String responseString = getCurrentTrack();
     response.setContentType("text/html;");
     response.getWriter().println(responseString);
