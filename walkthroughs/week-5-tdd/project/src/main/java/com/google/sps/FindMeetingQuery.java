@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public final class FindMeetingQuery {
 
-  public final int DURATION = 0;
+  public final int DEFAULT_DURATION = 0;
   public final Boolean NOT_INCLUSIVE = false;
   public final Boolean INCLUSIVE = true;
 
