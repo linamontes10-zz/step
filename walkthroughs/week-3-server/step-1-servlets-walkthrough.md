@@ -78,7 +78,7 @@ To see this in action, `cd` into the `page-view-counter` directory and then run
 a development server:
 
 ```bash
-mvn appengine:devserver
+mvn package appengine:run
 ```
 
 Run this command and then click the
@@ -131,7 +131,7 @@ Second, using a framework involves a lot of setup and configuration. Code is
 hard enough to debug, even without fighting with framework config files!
 
 Third, most of the Google Cloud tutorials use servlets. So anything you find in
-a Google Cloud tutorial should "just work" with the code you during SPS.
+a Google Cloud tutorial should "just work" with the code you write during STEP.
 
 All of that said, if using a framework is interesting to you, consider exploring
 that during the open project!

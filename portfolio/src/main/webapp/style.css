@@ -9,17 +9,47 @@ button {
   font-family: 'Courier New', Courier, monospace;
 }
 
+.comment {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.comment img {
+  border-radius: 50%;
+  width: 6%;
+}
+
+#comments-container {
+  display: flex;
+  flex-direction: column;
+  outline: 2px dashed lightblue;
+  width: 100%;
+}
+
 #content {
   color: lightslategray;
+  display: flex;
+  flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  padding: 10px;
   width: 850px;
 }
 
-#currently-playing {
-  color: cornflowerblue;
-  text-decoration-line: underline;
-  text-decoration-style: solid;
+#delete {
+  background-color: lightcoral;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 14px 20px;
+}
+
+#delete:hover {
+  background-color: firebrick;
 }
 
 #greeting-container {
@@ -30,32 +60,95 @@ img {
   width: 25%;
 }
 
-.inline {
-  display: inline;
+input[type=number] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 12px 20px;
 }
 
-li {
-  display: inline;
+input[type=submit] {
+  background-color: lightblue;
+  border-radius: 4px;
+  color: lightslategray;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 8px 0;
+  padding: 14px 20px;
 }
 
+input[type=submit]:hover {
+  background-color: lightskyblue;
+}
+
+textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 8px 0;
+  padding: 12px 20px;
+  width: 100%;
+}
 
 #title {
   color: lightblue;
 }
 
 ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.iframe-flex {
-  display: inline-block;
-}
-
-.iframe-items{
-  align-content: center;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 10px;
+  width: 90%;
+}
+
+@media all and (max-width: 565px) {
+  .comment img {
+    width: 10%;
+  }
+
+  #comments-container {
+    width: 100%;
+  }
+
+  #content {
+    flex-direction: column;
+    width: 530px;
+  }
+
+  img {
+    width: 50%;
+  }
+
+  ul {
+    width: 80%;
+  }
+}
+
+@media all and (max-width: 295px) {
+
+  .comment img {
+    width: 15%;
+  }
+
+  #comments-container {
+    width: 100%;
+  }
+
+  #content {
+    flex-direction: column;
+    width: 260px;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  ul {
+    flex-direction: column;
+  }
 }

@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="misc.html">For Fun</a></li>
-      <li><a href="experience.html">Experience</a></li>
-      <li><a href="contact.html">Contact Me</a></li>
-    </ul>
+  <body onload="displayComments()">
     <div id="content">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="misc.html">For Fun</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="contact.html">Contact Me</a></li>
+      </ul>
       <h1 id="title">Lina's Portfolio</h1>
       <p>Welcome to my portfolio! My name is Lina, and I'm a Latina in Tech currently interning at 
           Google as a STEP intern. I am a rising Junior at Yale!</p> 
@@ -23,6 +23,29 @@
       <p>Click here to get a random fun fact about me:</p>
       <button onclick="addRandomFunFact()">Hello</button>
       <div id="fun-fact-container"></div>
+
+      <h1>Comments:</h1>
+      <label for="comment-limit">Enter the limit on the number of comments you want to display:</label>
+      <input type="number" id="comment-limit" name="comment-limit"
+        min="0" max ="100" value="10"
+        onchange="displayComments()">
+      <br/><br/>
+      <div id="comments-container"></div>
+
+      <br/><br/>
+
+      <form action="/add-comments" method="POST">
+        <p>Enter a comment:</p>
+        <textarea name="comment-input" placeholder="I love your website! :)"></textarea>
+        <br/><br/>
+
+        <p>Add your name:</p>
+        <textarea name="name-input" placeholder="Grace Hopper"></textarea>
+        <br/><br/>
+
+        <input type="submit" />
+      </form>
+      <button onclick="deleteComments()" id="delete">Delete All Comments</button>
     </div>
   </body>
 </html>
