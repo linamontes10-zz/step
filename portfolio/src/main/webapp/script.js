@@ -13,6 +13,19 @@
 // limitations under the License.
 
 /**
+ * Adds currently playing song to the page.
+ */
+async function getCurrentlyPlayingSongAsync() {
+  const response = await fetch("/spotify");
+  const song = await response.text();
+  document.getElementById("currently-playing").innerText = song;
+}
+
+setInterval(function() {
+  getCurrentlyPlayingSongAsync();
+}, 10000);
+
+/**
  * Adds a random fun fact to the page.
  */
 function addRandomFunFact() {
@@ -80,6 +93,7 @@ async function displayComments() {
  */
 async function deleteComments() {
   const result = window.confirm("Are you sure you want to delete all the comments?")
+
 
   if (result) {
     await fetch('/delete-comments', {method: 'POST'});
